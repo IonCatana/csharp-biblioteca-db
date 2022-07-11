@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace csharp_biblioteca
+namespace csharp_biblioteca_db
 {
     internal class Prestito
     {

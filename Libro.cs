@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace csharp_biblioteca
+namespace csharp_biblioteca_db
 {
-    internal class Libro : Documento
+    class Libro : Documento
     {
         public int NumeroPagine { get; set; }
 
-        public Libro(string Codice, string Titolo, int Anno, string Settore, int NumeroPagine) : base(Codice, Titolo, Anno, Settore)
+        public Libro(int Codice, string Titolo, int Anno, string Settore, int NumeroPagine, string sScaffale) : base(Codice, Titolo, Anno, Settore, sScaffale)
         {
             this.NumeroPagine = NumeroPagine;
         }

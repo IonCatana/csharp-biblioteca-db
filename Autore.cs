@@ -4,13 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace csharp_biblioteca
+namespace csharp_biblioteca_db
 {
-    internal class Autore : Persona
+    class Autore : Persona
     {
-        public Autore(string Nome, string Cognome) : base(Nome, Cognome)
-        {
+        public string sMail { get; set; }
+        public int iCodiceAutore;
 
+        public Autore(string Nome, string Cognome, string Email) : base(Nome, Cognome)
+        {
+            this.sMail = Email;
+            this.iCodiceAutore = GeneraCodiceAutore();
+        }
+        public int GeneraCodiceAutore()
+        {
+            return 10000 + base.Nome.Length + base.Cognome.Length + this.sMail.Length;
         }
     }
 }

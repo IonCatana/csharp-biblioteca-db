@@ -4,41 +4,69 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace csharp_biblioteca
+namespace csharp_biblioteca_db
 {
-    internal class Biblioteca
+    class Biblioteca
     {
         public string Nome { get; set; }
-        public List<Documento> Documenti { get; set; }
-        public List<Prestito> Prestiti { get; set; }
-        public List<Utente> Utenti { get; set; }
-
+        public List<Scaffale> ScaffaliBiblioteca { get; set; }
         public Biblioteca(string Nome)
         {
             this.Nome = Nome;
-            this.Documenti = new List<Documento>();
-            this.Prestiti = new List<Prestito>();
-            this.Utenti = new List<Utente>();
+            this.ScaffaliBiblioteca = new List<Scaffale>();
+            List<string> elencoScaffali = db.scaffaliGet();
+            elencoScaffali.ForEach(item =>
+            {
+                Scaffale nuovo = new Scaffale(item);
+                this.ScaffaliBiblioteca.Add(nuovo);
+            });
         }
 
-        public List<Documento> SearchByCodice(string Codice)
+        public void AggiungiScaffale(string snomeScaffale)
         {
-            return this.Documenti.Where(d => d.Codice == Codice).ToList();
+            Scaffale s1 = new Scaffale(snomeScaffale);
+            this.ScaffaliBiblioteca.Add(s1);
+            db.scaffaleAdd(s1.Numero);
+        }
+        public void AggiungiLibro(int iCodice, string sTitolo, int iAnno, string sSettore, int iNumPagine, string sScaffale, List<Autore> lListaAutori)
+        {
+            Libro lib1 = new Libro(iCodice, sTitolo, iAnno, sSettore, iNumPagine, sScaffale);
+
+            db.libroAdd(lib1, lListaAutori);
+        }
+        public List<Documento> SearchByAutore(string sAutore)
+        {
+            /* 
+                SELECT titolo, Settore, Stato, Tipo
+                FROM Docuemnti, AUTORE_DOCUMENTI
+                INNER JOIN(Autori_Documenti) ON Documenti.codice_documento = Autori_Documenti.
+             */
+            return null;
+        }
+        public void StampaListaDocumenti(List<Documento> lListaDoc)
+        {
+            return;
+        }
+        public int GestisciOperazioneBiblioteca(int iCodiceOperazione)
+        {
+            List<Documento> lRes;
+            string sAppo;
+            switch (iCodiceOperazione)
+            {
+                case 1:
+                    {
+                        Console.WriteLine("Inserisci Autore:");
+                        sAppo = Console.ReadLine();
+                        lRes = SearchByAutore(sAppo);
+                        if (lRes == null)
+                            return 1;
+                        else
+                            StampaListaDocumenti(lRes);
+                        break;
+                    }
+            }
+            return 0;
         }
 
-        public List<Documento> SearchByTitolo(string Titolo)
-        {
-            return this.Documenti.Where(d => d.Titolo == Titolo).ToList();
-        }
-
-        public List<Prestito> SearchPrestiti(string Numero)
-        {
-            return this.Prestiti.Where(p => p.Numero == Numero).ToList();
-        }
-
-        public List<Prestito> SearchPrestiti(string Nome, string Cognome)
-        {
-            return this.Prestiti.Where(p => p.Utente.Nome == Nome && p.Utente.Cognome == Cognome).ToList();
-        }
     }
 }
